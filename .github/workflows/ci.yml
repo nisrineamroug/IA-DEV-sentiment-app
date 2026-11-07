@@ -8,5 +8,8 @@ jobs:
         with: { fetch-depth: 0 }
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
-      - run: python -m venv .venv && . .venv/bin/activate && pip install pandas scikit-learn pytest
+      - run: python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt -r requirements-dev.txt
+      - run: . .venv/bin/activate && python src/make_demo.py && python src/train.py
+      - run: . .venv/bin/activate && ruff check .
+      - run: . .venv/bin/activate && mypy api sentiment_app
       - run: . .venv/bin/activate && pytest -q
