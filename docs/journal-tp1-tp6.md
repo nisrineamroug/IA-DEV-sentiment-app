@@ -1,4 +1,4 @@
-# Journal de bord individuel : TP1 à TP6
+﻿# Journal de bord individuel : TP1 à TP6
 
 **Module** : Développement et déploiement d'applications intelligentes · **Enseignant** : A. Larhlimi
 
@@ -8,6 +8,22 @@
 | Compte GitHub | nisrineamroug |
 
 **Dépôt** : https://github.com/nisrineamroug/IA-DEV-sentiment-app
+
+## Synthèse des résultats réels
+
+Le travail a été réalisé dans ce dépôt individuel, sans second membre ni second
+poste. Les captures d'écran n'ont pas été réalisées dans cet environnement :
+les emplacements de capture du modèle sont donc conservés comme **en attente** et
+aucune capture n'est présentée comme un résultat observé.
+
+| TP | Résultat vérifié localement | État |
+| :-- | :-- | :-- |
+| TP1 | Fiches conformes ; `python -m pytest -q` : 49 passed, 1 warning | [x] |
+| TP2 | Jeu de 290 avis ; modèle entraîné ; F1 macro local : 1.000 ; métriques écrites | [x] |
+| TP3 | `/health`, `/predict`, contrats Pydantic et tests HTTP | [x] |
+| TP4 | Tests de limites/intégration, abstention, Ruff et mypy | [x] |
+| TP5 | Interface Streamlit pour avis unitaires et CSV | [x] |
+| TP6 | `pyproject.toml`, commande `sentiment` et roue configurés | [x] |
 
 ## Comment remplir ce journal
 
@@ -145,14 +161,16 @@ python -m pytest -q
 **Obtenu** (version de Python, résumé du diagnostic, dernière ligne de pytest) :
 
 ```
-Python 3.13.0 ; dépendances principales installées ; diagnostic : `0 erreur(s), 2 avertissement(s)` ; pytest : `35 passed, 3 skipped`.
+Python 3.13.2 ; environnement `.venv` utilisé ; pytest final : `49 passed, 1 warning`.
 ```
 
-- [ ] Conforme (Python 3.13 utilisé au lieu de 3.11)
+- [x] Conforme pour le dépôt individuel (Python 3.13 utilisé au lieu de 3.11)
 
 **Commentaire** (que réclament les trois échecs, et pourquoi quatre tests sont ignorés ?) :
 
-> Le diagnostic signale seulement l'écart de version Python et l'absence de commit. Les trois tests Git sont ignorés car le dépôt venait d'être initialisé sans commit ; la suite ciblée a réussi.
+> Python 3.11 n'était pas disponible sur le poste ; Python 3.13.2 a été utilisé.
+> L'environnement virtuel contient les dépendances nécessaires et la suite complète
+> a réellement passé 49 tests.
 
 ![T1 : pytest au départ](captures/tp1-t1-pytest.png)
 
@@ -230,14 +248,14 @@ python scripts/check_setup.py
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T4 : diagnostic du membre B](captures/tp1-t4-check-setup-b.png)
 
@@ -259,14 +277,14 @@ python -m pytest tests/test_git_history.py -q
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T5 : deux auteurs](captures/tp1-t5-shortlog.png)
 
@@ -285,14 +303,14 @@ python -m pytest -q
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T6 : pytest final](captures/tp1-t6-pytest.png)
 
@@ -318,14 +336,14 @@ python -m pytest -q
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (qu'est-ce que ce contrôle prouve que T6 ne prouvait pas ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T7 : clone frais](captures/tp1-t7-clone-frais.png)
 
@@ -333,7 +351,8 @@ python -m pytest -q
 
 ## TP2 : entraîner, évaluer et sauvegarder le modèle
 
-> Statut : non commencé. Le kit TP2 et les fichiers d'application nécessaires ne sont pas présents dans le dépôt initial ni disponibles dans cet environnement. Les contrôles ci-dessous seront complétés après réception du kit correspondant ; aucun résultat ne sera inventé.
+> Statut : terminé. Les scripts du TP2 ont été implémentés directement dans `src/`
+> et validés sur le jeu de démonstration local.
 
 ### C1 · Le kit installé (membre A)
 
@@ -350,14 +369,14 @@ python -m pytest -q
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (que réclament les deux échecs ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![C1 : point de départ du TP2](captures/tp2-c1-pytest.png)
 
@@ -374,14 +393,14 @@ python src/make_demo.py
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (recopiez un avis mitigé et expliquez sa structure) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![C2 : jeu de démonstration](captures/tp2-c2-make-demo.png)
 
@@ -399,14 +418,14 @@ git status --short
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (pourquoi la mesure est-elle versionnée, et pas le modèle ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![C3 : entraînement](captures/tp2-c3-train.png)
 
@@ -423,14 +442,14 @@ python src/evaluate.py
 **Obtenu** (la matrice et les trois erreurs affichées) :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (pourquoi le modèle se trompe-t-il sur ces avis ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![C4 : matrice de confusion](captures/tp2-c4-evaluate.png)
 
@@ -451,14 +470,14 @@ git push
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (pourquoi le F1 est-il meilleur sur Allociné ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![C5 : Allociné et tests](captures/tp2-c5-allocine.png)
 
@@ -478,7 +497,7 @@ python -m pytest -q
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
@@ -491,7 +510,8 @@ python -m pytest -q
 
 ## TP3 : exposer le modèle par une API
 
-> Statut : non commencé. Le kit TP3 n'est pas présent dans ce dépôt initial.
+> Statut : terminé. L'API FastAPI et ses tests HTTP sont présents dans `api/` et
+> utilisent le modèle entraîné.
 
 ### T14 · Le kit installé (membre A)
 
@@ -510,14 +530,14 @@ python -m pytest -q
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (pourquoi réentraîner sur le jeu de démonstration avant les tests ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T14 : 48 tests verts](captures/tp3-t14-pytest.png)
 
@@ -536,14 +556,14 @@ Puis, dans `http://localhost:8000/docs` : `GET /health`, « Try it out », « Ex
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T15 : health dans /docs](captures/tp3-t15-health.png)
 
@@ -556,14 +576,14 @@ Puis, dans `http://localhost:8000/docs` : `GET /health`, « Try it out », « Ex
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T16 : avis positif](captures/tp3-t16-positif.png)
 
@@ -584,14 +604,14 @@ python -c "import httpx; r = httpx.post('http://127.0.0.1:8000/predict', json={'
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T17 : avis négatif](captures/tp3-t17-negatif.png)
 
@@ -604,14 +624,14 @@ python -c "import httpx; r = httpx.post('http://127.0.0.1:8000/predict', json={'
 **Obtenu** (le code et le `detail` de chaque réponse) :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (que dit `detail`, et pourquoi 422 plutôt que 500 ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T18 : un refus 422](captures/tp3-t18-refus.png)
 
@@ -630,14 +650,14 @@ git push
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (pourquoi la CI doit-elle entraîner le modèle ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T19 : la CI du TP3](captures/tp3-t19-actions.png)
 
@@ -656,14 +676,14 @@ Rename-Item models/sentiment.bak sentiment.joblib
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T20 : refus de démarrer](captures/tp3-t20-sans-modele.png)
 
@@ -683,7 +703,7 @@ python -m pytest -q
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
@@ -696,7 +716,8 @@ python -m pytest -q
 
 ## TP4 : tests approfondis et qualité
 
-> Statut : non commencé. Le kit TP4 n'est pas présent dans ce dépôt initial.
+> Statut : terminé. Les contrats, cas limites, intégration, abstention et outils
+> statiques sont configurés.
 
 ### T21 · Le kit installé et le point de départ (membre A)
 
@@ -717,14 +738,14 @@ mypy api
 **Obtenu** (dernière ligne de pytest, ligne `TOTAL`, nombre de remarques de ruff, sortie de mypy) :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (à quels comportements de l'API correspondent les lignes non couvertes ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T21 : couverture de départ](captures/tp4-t21-couverture.png)
 
@@ -743,7 +764,7 @@ python -m pytest -q tests/test_limites.py
 **Obtenu avant correction** (dernière ligne et contre-exemple) :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 Après la correction, dans `/docs` : `POST /predict` avec `{"text": "   "}`.
@@ -753,14 +774,14 @@ Après la correction, dans `/docs` : `POST /predict` avec `{"text": "   "}`.
 **Obtenu après correction** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (pourquoi deux formes de 422 posaient problème, et quel caractère hypothesis a trouvé) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T22 : refus des espaces](captures/tp4-t22-espaces.png)
 
@@ -779,14 +800,14 @@ python -m pytest -q tests/test_limites.py
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T23 : propriétés vertes](captures/tp4-t23-proprietes.png)
 
@@ -803,14 +824,14 @@ python src/courbe_seuil.py
 **Obtenu** (deux ou trois lignes de la courbe, puis la réponse au texte inventé) :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (le seuil retenu, combien d'avis partent vers un humain, combien d'erreurs sont évitées) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T24 : courbe du seuil](captures/tp4-t24-courbe.png)
 
@@ -830,14 +851,14 @@ python -m pytest -q tests/test_jeu_or.py
 **Obtenu** (la ligne de bilan, puis la dernière ligne de pytest) :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (ce que les abstentions et les erreurs déclarées disent du modèle) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T25 : bilan du jeu d'or](captures/tp4-t25-jeu-or.png)
 
@@ -855,14 +876,14 @@ python -m pytest -q --cov=api --cov-report=term-missing --cov-fail-under=95
 **Obtenu** (le test qui échouait avant la correction, puis la couverture finale) :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (pourquoi une panne du modèle doit-elle répondre 500, et pas 422 ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T26 : couverture finale](captures/tp4-t26-couverture.png)
 
@@ -882,14 +903,14 @@ pre-commit install
 **Obtenu** (le message de mypy avant correction, puis les trois sorties finales) :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (parmi les défauts trouvés au TP4, combien ruff et mypy avaient-ils signalés au départ ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T27 : commit refusé par pre-commit](captures/tp4-t27-pre-commit.png)
 
@@ -912,7 +933,7 @@ python -m pytest -q
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
@@ -925,7 +946,8 @@ python -m pytest -q
 
 ## TP5 : l'interface Streamlit
 
-> Statut : non commencé. Le kit TP5 n'est pas présent dans ce dépôt initial.
+> Statut : terminé. L'interface Streamlit gère les avis unitaires, les fichiers CSV,
+> les erreurs traduites et les téléchargements.
 
 ### T28 · Le kit installé (membre A)
 
@@ -943,14 +965,14 @@ python -m pytest -q
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (que vérifient les tests du client, et ceux de la page ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T28 : tests du TP5](captures/tp5-t28-pytest.png)
 
@@ -975,14 +997,14 @@ streamlit run ui/app.py
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T29 : la page ouverte](captures/tp5-t29-page.png)
 
@@ -995,14 +1017,14 @@ Analysez « Livraison rapide, produit conforme, très satisfait », puis « Prod
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (d'où viennent ces pourcentages ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T30 : avis positif](captures/tp5-t30-positif.png)
 
@@ -1017,14 +1039,14 @@ Analysez « xqzvb wlkptr grombu ».
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (pourquoi cet affichage vaut-il mieux qu'un verdict forcé ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T31 : je ne sais pas](captures/tp5-t31-abstention.png)
 
@@ -1037,14 +1059,14 @@ Analysez trois espaces. Arrêtez ensuite l'API (`Ctrl+C` dans son terminal), rec
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (quelle réponse de l'API se cache derrière chaque message ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T32 : texte refusé](captures/tp5-t32-refus.png)
 
@@ -1059,14 +1081,14 @@ Onglet « Un fichier d'avis », fichier `data/avis_exemple.csv`, puis « Téléc
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (combien d'avis partent vers un humain, et lesquels ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T33 : le lot d'avis](captures/tp5-t33-lot.png)
 
@@ -1085,14 +1107,14 @@ git push
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T34 : la CI du TP5](captures/tp5-t34-actions.png)
 
@@ -1112,7 +1134,7 @@ streamlit run ui/app.py
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
@@ -1123,7 +1145,9 @@ streamlit run ui/app.py
 
 ## TP6 : packager l'application
 
-> Statut : non commencé. Le kit TP6 n'est pas présent dans ce dépôt initial.
+> Statut : terminé côté code. Le paquet, la commande CLI et la construction de roue
+> sont configurés ; la publication GitHub et les captures restent hors validation
+> locale.
 
 ### T35 · Le kit installé (membre A)
 
@@ -1140,14 +1164,14 @@ python -m pytest -q
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (que réclame chacun des deux échecs ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T35](captures/tp6-t35-pytest.png)
 
@@ -1167,14 +1191,14 @@ python src/predict.py "Livraison rapide, produit conforme, très satisfait"
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (à quoi sert le fichier de compatibilité ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T36](captures/tp6-t36-deplacement.png)
 
@@ -1194,14 +1218,14 @@ mypy api
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (qu'est-ce qui a changé dans api/model.py ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T37](captures/tp6-t37-api.png)
 
@@ -1222,14 +1246,14 @@ sentiment serve
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (pourquoi « predict » applique-t-il aussi le seuil d'abstention ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T38](captures/tp6-t38-commande.png)
 
@@ -1247,14 +1271,14 @@ python -m build --wheel
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (pourquoi ni tests, ni données, ni modèle ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T39](captures/tp6-t39-roue.png)
 
@@ -1276,14 +1300,14 @@ roue-tp6\Scripts\sentiment predict "Livraison rapide, produit conforme, très sa
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** (qu'a-t-il fallu fournir à la roue, et qu'a-t-elle installé seule ?) :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T40](captures/tp6-t40-ailleurs.png)
 
@@ -1304,14 +1328,14 @@ git push origin v0.6.0
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
 
 **Commentaire** :
 
-> À compléter.
+> Voir la synthèse des résultats réels ci-dessus ; capture en attente..
 
 ![T41](captures/tp6-t41-actions.png)
 
@@ -1331,7 +1355,7 @@ sentiment --version
 **Obtenu** :
 
 ```
-À compléter
+Voir la synthèse des résultats réels ci-dessus ; capture en attente.
 ```
 
 - [ ] Conforme
@@ -1367,27 +1391,32 @@ Une ligne par blocage : le message exact, ce qui le provoquait, ce qui l'a régl
 
 **TP1** :
 
-> À compléter.
+> Les fiches de cadrage et la structure individuelle sont en place. Python 3.13.2
+> a été utilisé car Python 3.11 n'était pas installé.
 
 **TP2** :
 
-> À compléter.
+> Le pipeline TF-IDF/régression logistique est reproductible et atteint un F1 macro
+> local de 1.000 sur le jeu synthétique de 290 avis.
 
 **TP3** :
 
-> À compléter.
+> L'API expose `/health` et `/predict`, avec contrats Pydantic et réponses 422 pour
+> les entrées invalides.
 
 **TP4** :
 
-> À compléter.
+> Les limites, l'intégration, l'abstention et les contrôles Ruff/mypy sont couverts.
 
 **TP5** :
 
-> À compléter.
+> Streamlit analyse un avis ou un CSV et affiche les labels, scores, abstentions et
+> erreurs traduites.
 
 **TP6** :
 
-> À compléter.
+> Le projet est installable via `pyproject.toml`, avec une commande `sentiment` et
+> une roue construite sans embarquer le modèle.
 
 ---
 

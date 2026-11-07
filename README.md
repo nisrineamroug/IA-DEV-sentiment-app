@@ -1,7 +1,8 @@
 # sentiment-app : dépôt individuel
 
 Application individuelle de Nisrine Amroug pour le cours *Développement et déploiement d'applications intelligentes*.
-Ce dépôt grandit chaque semaine ; la semaine 1 met en place le cadrage et l'environnement.
+Le projet couvre les TP1 à TP6 : modèle reproductible, API FastAPI, tests de qualité,
+interface Streamlit et paquet Python installable.
 
 ## Installation (3 commandes)
 
@@ -16,6 +17,26 @@ pip install -r requirements.txt
 ```bash
 python scripts/check_setup.py    # diagnostic lisible : versions, dossiers, Git
 pytest -q                        # mêmes vérifications sous forme de tests
+```
+
+Entraîner le modèle local :
+
+```bash
+python src/make_demo.py
+python src/train.py
+```
+
+Lancer l'API et l'interface :
+
+```bash
+uvicorn api.main:app
+streamlit run ui/app.py
+```
+
+Construire le paquet :
+
+```bash
+python -m build --wheel
 ```
 
 La démarche complète de test, étape par étape, est dans `TESTS.md`.
