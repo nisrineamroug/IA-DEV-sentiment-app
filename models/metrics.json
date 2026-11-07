@@ -1,0 +1,8 @@
+{
+  "source": "demo",
+  "samples": 290,
+  "test_samples": 58,
+  "vocabulary": 91,
+  "f1_macro": 1.0,
+  "created_at": "2026-11-07T11:50:30.475477+00:00"
+}
