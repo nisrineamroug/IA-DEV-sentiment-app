@@ -1,8 +1,10 @@
 {
   "source": "demo",
-  "samples": 290,
-  "test_samples": 58,
-  "vocabulary": 91,
-  "f1_macro": 1.0,
-  "created_at": "2026-11-07T11:50:30.475477+00:00"
+  "date": "2026-11-14",
+  "n_train": 232,
+  "n_test": 58,
+  "f1_macro": 0.879,
+  "accuracy": 0.8793,
+  "recall_negative": 0.931,
+  "seuil_f1": 0.85
 }

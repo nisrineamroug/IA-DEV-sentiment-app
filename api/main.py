@@ -15,7 +15,9 @@ MODEL_NAME = "tfidf-logreg (TP2, models/sentiment.joblib)"
 
 @asynccontextmanager
 async def lifespan(application: FastAPI) -> AsyncIterator[None]:
-    application.state.classifier = load_model()
+    classifier = load_model()
+    application.state.classifier = classifier
+    application.state.loaded_classifier = classifier
     yield
 
 
@@ -23,7 +25,8 @@ app = FastAPI(title="Sentiment API", version="0.6.0", lifespan=lifespan)
 
 
 def _classifier(request: Request) -> Any:
-    classifier = getattr(request.app.state, "classifier", None)
+    state = request.app.state
+    classifier = getattr(state, "classifier", getattr(state, "loaded_classifier", None))
     if classifier is None:
         raise HTTPException(status_code=503, detail="Modèle non chargé")
     return classifier
@@ -37,8 +40,9 @@ def health(request: Request) -> dict[str, str]:
 
 @app.post("/predict", response_model=PredictResponse)
 def prediction(payload: PredictRequest, request: Request) -> PredictResponse:
+    classifier = _classifier(request)
     try:
-        result = predict(payload.text, model=_classifier(request))
+        result = predict(payload.text, model=classifier)
     except ValueError as exc:
         detail = [{"loc": ["body", "text"], "msg": str(exc), "type": "value_error"}]
         raise HTTPException(status_code=422, detail=detail) from exc

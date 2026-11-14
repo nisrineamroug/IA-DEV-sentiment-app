@@ -1,55 +1,101 @@
-"""Generate the deterministic review dataset used by local development."""
-from __future__ import annotations
+#!/usr/bin/env python
+"""Génère un jeu de démonstration d'avis en français, déterministe.
 
+290 avis : 80 nettement positifs, 80 nettement négatifs, 100 mitigés
+(le sentiment qui compte est celui qui conclut la phrase) et 30 neutres
+rattachés à la classe la plus proche. Les avis mitigés sont volontaires :
+ils font commettre au modèle quelques erreurs instructives.
+
+Usage : python src/make_demo.py
+Produit : data/demo_reviews.csv
+"""
 import csv
+import random
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-DATA_PATH = ROOT / "data" / "demo_reviews.csv"
+RACINE = Path(__file__).resolve().parents[1]
+SORTIE = RACINE / "data" / "demo_reviews.csv"
+GRAINE = 42
 
-POSITIVE = [
-    "Service impeccable et livraison rapide, je recommande.",
-    "Produit conforme, qualité excellente et expérience agréable.",
-    "Interface simple, efficace et très facile à utiliser.",
-    "Très satisfait de cette commande et du support.",
+POSITIFS = [
+    "Service impeccable et livraison en avance",
+    "Produit conforme à la description, très satisfait",
+    "Excellent rapport qualité prix",
+    "Emballage soigné et finitions propres",
+    "Prise en main immédiate, notice claire",
+    "Le vendeur a répondu en moins d'une heure",
+    "Je recommande sans hésiter",
+    "Solide, léger, exactement ce que je cherchais",
 ]
-NEGATIVE = [
-    "Produit cassé à l'arrivée et service client injoignable.",
-    "Commande jamais reçue, remboursement toujours en attente.",
-    "Application qui plante et expérience vraiment décevante.",
-    "Qualité médiocre, livraison tardive et support inutile.",
+NEGATIFS = [
+    "Produit cassé à l'arrivée",
+    "Aucune réponse du service client",
+    "Commande jamais reçue et remboursement en attente",
+    "Se casse au bout de deux utilisations",
+    "Notice incompréhensible et pièces manquantes",
+    "Taille trop petite et retour payant",
+    "Application qui plante à chaque ouverture",
+    "Facture erronée, aucun geste commercial",
 ]
-MIXED = [
-    "Le produit est joli mais la livraison est très lente.",
-    "Service agréable, toutefois la qualité reste décevante.",
-    "Prix correct mais application compliquée et instable.",
-    "Bonne idée, mais le résultat est loin d'être parfait.",
-]
-NEUTRAL = [
-    "Le colis est arrivé mardi dans un emballage standard.",
-    "J'ai utilisé le service pendant deux semaines.",
-    "La commande contient un produit de couleur bleue.",
+ATTENUATIONS = ["au début", "les premiers jours", "sur le papier", "à la livraison", "au déballage"]
+RETOURNEMENTS = ["mais finalement", "sauf que ensuite", "puis rapidement", "avant que", "jusqu'à ce que"]
+NEUTRES = [
+    "Reçu dans les délais annoncés",
+    "Conforme à la fiche produit",
+    "Rien de particulier à signaler",
+    "Usage standard, sans surprise",
+    "Livré, monté, utilisé",
 ]
 
 
-def build_reviews() -> list[dict[str, str]]:
-    reviews: list[dict[str, str]] = []
-    for index in range(145):
-        reviews.append({"review": POSITIVE[index % len(POSITIVE)], "label": "positive"})
-        reviews.append({"review": NEGATIVE[index % len(NEGATIVE)], "label": "negative"})
-    return reviews
+def phrases_nettes(modeles, etiquette, nombre, rng):
+    suffixes = ["", ", vraiment", ", comme prévu", " pour ce prix", " cette fois"]
+    return [(f"{rng.choice(modeles)}{rng.choice(suffixes)}.", etiquette) for _ in range(nombre)]
 
 
-def main() -> None:
-    DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
-    rows = build_reviews()
-    with DATA_PATH.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["review", "label"])
-        writer.writeheader()
-        writer.writerows(rows)
-    print(f"{len(rows)} avis écrits, 145 positifs et 145 négatifs")
-    print("Jeu de démonstration reproductible généré dans data/demo_reviews.csv")
+def phrases_mitigees(nombre, rng):
+    """Deux moitiés opposées : l'étiquette suit la seconde, celle qui conclut."""
+    lignes = []
+    for i in range(nombre):
+        if i % 2 == 0:
+            debut, fin, etiquette = rng.choice(POSITIFS), rng.choice(NEGATIFS), "negative"
+        else:
+            debut, fin, etiquette = rng.choice(NEGATIFS), rng.choice(POSITIFS), "positive"
+        lignes.append((f"{debut} {rng.choice(ATTENUATIONS)}, {rng.choice(RETOURNEMENTS)} {fin.lower()}.", etiquette))
+    return lignes
+
+
+def phrases_neutres(nombre, rng):
+    lignes = []
+    for i in range(nombre):
+        base = rng.choice(NEUTRES)
+        if i % 2 == 0:
+            lignes.append((f"{base}, {rng.choice(POSITIFS).lower()}.", "positive"))
+        else:
+            lignes.append((f"{base}, {rng.choice(NEGATIFS).lower()}.", "negative"))
+    return lignes
+
+
+def main() -> int:
+    rng = random.Random(GRAINE)
+    lignes = (
+        phrases_nettes(POSITIFS, "positive", 80, rng)
+        + phrases_nettes(NEGATIFS, "negative", 80, rng)
+        + phrases_mitigees(100, rng)
+        + phrases_neutres(30, rng)
+    )
+    rng.shuffle(lignes)
+    SORTIE.parent.mkdir(parents=True, exist_ok=True)
+    with SORTIE.open("w", encoding="utf-8", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["review", "label"])
+        w.writerows(lignes)
+    positifs = sum(1 for _, e in lignes if e == "positive")
+    print(f"{len(lignes)} avis écrits dans {SORTIE.relative_to(RACINE)}")
+    print(f"  {positifs} positifs, {len(lignes) - positifs} négatifs")
+    print("  dont 100 avis mitigés et 30 neutres, volontairement difficiles")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

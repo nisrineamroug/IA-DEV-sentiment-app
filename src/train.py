@@ -1,88 +1,94 @@
-"""Train and persist the sentiment classifier."""
-from __future__ import annotations
+#!/usr/bin/env python
+"""Entraîne et sauvegarde le modèle de sentiment.
 
+Usage :
+  python src/train.py              # jeu de démonstration (data/demo_reviews.csv)
+  python src/train.py --allocine   # vrai jeu public : 20 000 avis Allociné
+
+Produit : models/sentiment.joblib et models/metrics.json
+"""
 import argparse
 import json
-from datetime import UTC, datetime
+from datetime import date
 from pathlib import Path
 
 import joblib
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import f1_score
+from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 
-ROOT = Path(__file__).resolve().parents[1]
-DATA_PATH = ROOT / "data" / "demo_reviews.csv"
-MODEL_PATH = ROOT / "models" / "sentiment.joblib"
-METRICS_PATH = ROOT / "models" / "metrics.json"
+RACINE = Path(__file__).resolve().parents[1]
+DEMO = RACINE / "data" / "demo_reviews.csv"
+URL_ALLOCINE = (
+    "https://huggingface.co/datasets/tblard/allocine/resolve/main/"
+    "allocine/validation-00000-of-00001.parquet"
+)
+MODELE = RACINE / "models" / "sentiment.joblib"
+METRIQUES = RACINE / "models" / "metrics.json"
+SEUIL_F1 = 0.85
+GRAINE = 42
 
 
-def load_reviews(use_allocine: bool = False) -> tuple[pd.DataFrame, str]:
-    if use_allocine:
-        try:
-            from datasets import load_dataset  # type: ignore[import-not-found]
-
-            dataset = load_dataset("allocine", split="train")
-            frame = pd.DataFrame(dataset).rename(columns={"text": "review", "label": "label"})
-            frame["label"] = frame["label"].map({0: "negative", 1: "positive"})
-            return frame[["review", "label"]], "allocine"
-        except Exception as exc:
-            print(f"Allociné indisponible ({exc}); utilisation du jeu de démonstration.")
-    if not DATA_PATH.exists():
-        from make_demo import main as make_demo
-
-        make_demo()
-    return pd.read_csv(DATA_PATH), "demo"
+def charger(allocine: bool) -> tuple[pd.DataFrame, str]:
+    if allocine:
+        df = pd.read_parquet(URL_ALLOCINE)
+        df["label"] = df["label"].map({0: "negative", 1: "positive"})
+        return df[["review", "label"]].dropna(), "allocine"
+    if not DEMO.exists():
+        raise SystemExit("data/demo_reviews.csv absent : lancez d'abord python src/make_demo.py")
+    return pd.read_csv(DEMO), "demo"
 
 
-def train(use_allocine: bool = False) -> dict[str, object]:
-    frame, source = load_reviews(use_allocine)
-    train_texts, test_texts, train_labels, test_labels = train_test_split(
-        frame["review"],
-        frame["label"],
-        test_size=0.2,
-        random_state=42,
-        stratify=frame["label"],
-    )
-    pipeline = Pipeline(
-        [
-            ("tfidf", TfidfVectorizer(ngram_range=(1, 2), lowercase=True)),
-            ("classifier", LogisticRegression(max_iter=1000, random_state=42)),
-        ]
-    )
-    pipeline.fit(train_texts, train_labels)
-    predictions = pipeline.predict(test_texts)
-    score = float(f1_score(test_labels, predictions, average="macro"))
-    vocabulary = len(pipeline.named_steps["tfidf"].vocabulary_)
-    MODEL_PATH.parent.mkdir(exist_ok=True)
-    joblib.dump(pipeline, MODEL_PATH)
-    metrics = {
-        "source": source,
-        "samples": int(len(frame)),
-        "test_samples": int(len(test_texts)),
-        "vocabulary": vocabulary,
-        "f1_macro": round(score, 4),
-        "created_at": datetime.now(UTC).isoformat(),
-    }
-    METRICS_PATH.write_text(json.dumps(metrics, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"Source : {source}, {len(frame)} avis")
-    print(f"{len(train_texts)} avis d'entraînement, {len(test_texts)} de test")
-    print(f"Vocabulaire : {vocabulary} termes")
-    print(f"F1 macro sur le jeu de test : {score:.3f}")
-    print(f"Modèle : {MODEL_PATH.relative_to(ROOT)}")
-    print(f"Métriques : {METRICS_PATH.relative_to(ROOT)}")
-    return metrics
+def construire_pipeline() -> Pipeline:
+    """Vectoriseur et modèle dans un seul objet : la même transformation
+    s'applique forcément à l'entraînement et en production."""
+    return Pipeline([
+        ("tfidf", TfidfVectorizer(ngram_range=(1, 2), min_df=2, sublinear_tf=True)),
+        ("clf", LogisticRegression(max_iter=1000, class_weight="balanced", random_state=GRAINE)),
+    ])
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--allocine", action="store_true", help="Use Allociné when available.")
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--allocine", action="store_true", help="utiliser le jeu public Allociné")
     args = parser.parse_args()
-    train(args.allocine)
+
+    df, source = charger(args.allocine)
+    print(f"Source : {source}, {len(df)} avis ({(df.label == 'negative').sum()} négatifs)")
+
+    # Découper AVANT toute transformation : sinon le jeu de test fuite dans l'entraînement
+    X_train, X_test, y_train, y_test = train_test_split(
+        df["review"], df["label"], test_size=0.2, random_state=GRAINE, stratify=df["label"]
+    )
+    print(f"{len(X_train)} avis d'entraînement, {len(X_test)} de test")
+
+    pipeline = construire_pipeline()
+    pipeline.fit(X_train, y_train)
+    print(f"Vocabulaire : {len(pipeline.named_steps['tfidf'].vocabulary_)} termes")
+
+    rapport = classification_report(y_test, pipeline.predict(X_test), output_dict=True, zero_division=0)
+    f1 = rapport["macro avg"]["f1-score"]
+    print(f"F1 macro sur le jeu de test : {f1:.3f} (seuil {SEUIL_F1})")
+
+    MODELE.parent.mkdir(parents=True, exist_ok=True)
+    joblib.dump(pipeline, MODELE)
+    METRIQUES.write_text(json.dumps({
+        "source": source,
+        "date": date.today().isoformat(),
+        "n_train": len(X_train),
+        "n_test": len(X_test),
+        "f1_macro": round(f1, 4),
+        "accuracy": round(rapport["accuracy"], 4),
+        "recall_negative": round(rapport["negative"]["recall"], 4),
+        "seuil_f1": SEUIL_F1,
+    }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"Modèle : {MODELE.relative_to(RACINE)}")
+    print(f"Métriques : {METRIQUES.relative_to(RACINE)} (versionné dans Git, contrairement au modèle)")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

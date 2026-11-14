@@ -1,64 +1,45 @@
-"""Compatibility module for the TP2 command."""
-from __future__ import annotations
+#!/usr/bin/env python
+"""Prédiction unitaire : la fonction que l'API de la semaine 3 appellera.
 
-import argparse
-import os
-from dataclasses import dataclass
+Usage :
+  python src/predict.py "Livraison rapide, très satisfait"
+  >>> from predict import predict ; predict("texte")
+"""
+import sys
+from functools import lru_cache
 from pathlib import Path
-from typing import Any
 
 import joblib
 
-ROOT = Path(__file__).resolve().parents[1]
+MODELE = Path(__file__).resolve().parents[1] / "models" / "sentiment.joblib"
 
 
-@dataclass(frozen=True)
-class Prediction:
-    label: str
-    score: float
-    abstained: bool
+@lru_cache(maxsize=1)
+def charger_modele():
+    """Chargé une seule fois par processus, pas à chaque appel."""
+    if not MODELE.exists():
+        raise FileNotFoundError("models/sentiment.joblib absent : lancez python src/train.py")
+    return joblib.load(MODELE)
 
 
-def load_model(path: Path | None = None) -> Any:
-    model_path = path or Path(os.environ.get("SENTIMENT_MODELE", ROOT / "models" / "sentiment.joblib"))
-    if not model_path.exists():
-        raise FileNotFoundError(f"{model_path} absent : lancez python src/train.py")
-    return joblib.load(model_path)
-
-
-def predict(text: str, model: Any = None, threshold: float = 0.6) -> Prediction:
-    if not text.strip():
+def predict(texte: str) -> dict:
+    """Renvoie {'label': 'positive'|'negative', 'score': float}."""
+    if not isinstance(texte, str) or not texte.strip():
         raise ValueError("texte vide")
-    classifier = model or load_model()
-    probabilities = classifier.predict_proba([text])[0]
-    index = int(probabilities.argmax())
-    score = float(probabilities[index])
-    return Prediction(str(classifier.classes_[index]).upper(), score, score < threshold)
-
-__all__ = ["Prediction", "load_model", "predict"]
+    pipeline = charger_modele()
+    etiquette = pipeline.predict([texte])[0]
+    score = float(pipeline.predict_proba([texte]).max())
+    return {"label": etiquette, "score": round(score, 4)}
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("text")
-    args = parser.parse_args()
-    result = predict(args.text)
-    label = "INDETERMINE" if result.abstained else result.label
-    print(f"{label} (confiance {result.score:.0%})")
+def main() -> int:
+    if len(sys.argv) < 2:
+        print(__doc__)
+        return 2
+    resultat = predict(" ".join(sys.argv[1:]))
+    print(f"{resultat['label']} (confiance {resultat['score']:.0%})")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("text")
-    args = parser.parse_args()
-    result = predict(args.text)
-    label = "INDETERMINE" if result.abstained else result.label
-    print(f"{label} (confiance {result.score:.0%})")
-
-
-if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

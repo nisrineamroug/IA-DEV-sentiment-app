@@ -34,3 +34,12 @@ ignore = ["E501", "E741"]
 python_version = "3.11"
 strict = true
 ignore_missing_imports = true
+
+# --- TP4 : outils de qualité ---
+[[tool.mypy.overrides]]
+module = ["joblib", "joblib.*", "sklearn", "sklearn.*", "pandas", "pandas.*", "uvicorn", "uvicorn.*"]
+ignore_missing_imports = true
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true

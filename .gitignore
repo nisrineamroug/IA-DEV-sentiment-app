@@ -31,3 +31,9 @@ Thumbs.db
 .coverage
 htmlcov/
 *.joblib
+
+# TP4
+.hypothesis/
+.mypy_cache/
+.ruff_cache/
+!data/jeu_or.csv
