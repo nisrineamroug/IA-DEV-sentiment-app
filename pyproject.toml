@@ -16,6 +16,12 @@ dependencies = [
   "requests>=2.32",
 ]
 
+[project.optional-dependencies]
+ui = [
+  "pandas>=2.2",
+  "streamlit>=1.39",
+]
+
 [project.scripts]
 sentiment = "sentiment_app.cli:main"
 

@@ -39,6 +39,29 @@ Construire le paquet :
 python -m build --wheel
 ```
 
+Installer le livrable construit :
+
+```powershell
+python -m pip install dist\sentiment_app-0.6.0-py3-none-any.whl
+sentiment --version
+```
+
+Le paquet contient le code, mais pas le modèle binaire. Après avoir entraîné le
+modèle dans le dépôt, indiquez son chemin avant d'utiliser la commande installée :
+
+```powershell
+$env:SENTIMENT_MODELE = (Resolve-Path models\sentiment.joblib).Path
+sentiment predict "Livraison rapide, produit conforme"
+sentiment serve
+```
+
+Pour installer aussi l'interface Streamlit depuis le projet :
+
+```powershell
+python -m pip install ".[ui]"
+streamlit run ui\app.py
+```
+
 La démarche complète de test, étape par étape, est dans `TESTS.md`.
 
 ## Structure
